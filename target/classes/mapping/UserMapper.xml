@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.example.entity.User">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="sex" jdbcType="INTEGER" column="sex"/>
+        <result property="userName" jdbcType="VARCHAR" column="user_name"/>
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+        <result property="salt" jdbcType="VARCHAR" column="salt"/>
+        <result property="password" jdbcType="VARCHAR" column="password"/>
+        <result property="totalNum" jdbcType="DECIMAL" column="total_num"/>
+        <result property="userNum" jdbcType="DECIMAL" column="user_num"/>
+        <result property="eoType" jdbcType="TINYINT" column="eo_type"/>
+        <result property="eoMark" jdbcType="VARCHAR" column="eo_mark"/>
+    </resultMap>
+    <!--开启二级缓存type : 缓存实现类，默认是PerpetualCache，也可以是第三方缓存的实现
+        size：最多缓存对象的个数
+        eviction：缓存回收策略，默认是LRU
+                LRU：最近最少使用策略，回收最长时间不被使用的缓存
+                FIFO：先进先出策略，回收最新进入的缓存
+                SOFT - 软引用：移除基于垃圾回收器状态和软引用规则的对象
+                WEAK - 弱引用：更积极地移除基于垃圾收集器状态和弱引用规则的对象
+        flushInterval：缓存刷新的间隔时间，默认是不刷新的
+        readOnly ： 是否只读，true 只会进行读取操作，修改操作交由用户处理 false 可以进行读取操作，也可以进行修改操作
+        -->
+
+    <!--
+     1  locate
+         判断字符串（string）中是否包含另一个字符串（subStr）
+         locate(subStr,string) ：函数返回subStr在string中出现的位置
+         // 如果字符串 string 包含 subStr
+        locate(subStr,string) > 0
+
+        // 如果字符串 string 不包含 subStr
+        locate(subStr,string) = 0
+        用法一致
+     2 POSITION('古' IN user_name)
+     3 INSTR(user_name, '古')
+    -->
+    <sql id="Base_Column_List_Address">
+        case
+            when  address_name='新疆维吾尔自治区' then '新疆'
+            when  address_name='内蒙古自治区' then '内蒙古'
+            when address_name='宁夏回族自治区' then '宁夏'
+            when address_name='西藏自治区' then '西藏'
+            when address_name='广西壮族自治区' then '广西'
+            when <![CDATA[ LOCATE('省',address_name) !=0 ]]>  then replace(address_name,'省','')
+            when <![CDATA[ LOCATE('市',address_name) !=0 ]]>  then replace(address_name,'市','')
+            when <![CDATA[ LOCATE('特別行政區',address_name) !=0 ]]>  then replace(address_name,'特別行政區','')
+            else address_name
+            end as address_name
+    </sql>
+
+    <sql id="Base_Column_List">
+        <trim prefix="" suffix="" suffixOverrides=",">
+            id,
+            sex,
+            user_name,
+            create_time,
+            salt,
+            password,
+            total_num,
+            user_num,
+            eo_type,
+            eo_mark,
+        </trim>
+    </sql>
+
+    <!--一级缓存 如果某个select标签查询不需要缓存，在select标签加上 flushCache="true" 也可以设置单个查询关闭缓存-->
+    <!--二级缓存 可以对单个Statement标签进行关闭和开启操作，通过配置 useCache="true" 来开启缓存-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+        SELECT
+            id,
+            sex,
+            user_name,
+            create_time,
+            salt,
+            password,
+            total_num,
+            user_num,
+            eo_type,
+            eo_mark
+        FROM dj_user
+        WHERE
+            id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+
+
+
+
+
+</mapper>
