@@ -1,5 +1,7 @@
 package com.example.mapper;
 
+import com.example.annotation.MapperKey;
+import com.example.annotation.MapperSign;
 import com.example.entity.User;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @Time: 15:20
  */
 @Repository
-public interface UserMapper {
+public interface UserMapper{
 
     User selectByPrimaryKey(int id);
 }

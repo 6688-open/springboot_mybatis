@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * http://localhost:8080/testBoot/getUser?id=1
  */
-@MapperScan("com.example.mapper") //扫描的mapper
+@MapperScan(value = "com.example.mapper") //扫描的mapper
 @SpringBootApplication
 public class DemoApplication {
 
